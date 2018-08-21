@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.standard.dao.StandardMapper">
+	<select id="getStandardList" resultType="Standard">
+		SELECT id,stdNum,zhname,version,`keys`,releaseDate,implDate,packagePath FROM standard 
+		<trim prefix="where" prefixOverrides="and | or">
+			<if test="keys!=null and keys!=''">
+				AND `keys` like CONCAT ('%',#{keys},'%')
+			</if>
+			<if test="id!=null and id!=''">
+				AND id=#{id}
+			</if>
+			<if test="stdNum!=null and stdNum!=''">
+				AND stdNum=#{stdNum}
+			</if>
+		</trim>
+		ORDER BY stdNum 
+		<if test="pageSize!=0">
+			LIMIT #{pageIndex},#{pageSize}
+		</if>
+	</select>
+	
+	<delete id="getStandardDeleteById">
+		DELETE FROM standard WHERE id=#{id}
+	</delete>
+	
+	<update id="getStandardUpdateById">
+		UPDATE standard SET stdNum=#{stdNum},zhname=#{zhname},version=#{version},`keys`=#{keys},releaseDate=#{releaseDate},implDate=#{implDate},packagePath=#{packagePath} WHERE id=#{id}
+	</update>
+	
+	<insert id="getStandardInsert">
+		INSERT INTO standard(stdNum,zhname,version,`keys`,releaseDate,implDate,packagePath) VALUES(#{stdNum},#{zhname},#{version},#{keys},#{releaseDate},#{implDate},#{packagePath})
+	</insert>
+	
+	<select id="getTotalCount" resultType="int">
+		SELECT COUNT(1) FROM standard
+		<trim prefix="where">
+			<if test="keys!=null and keys!=''">
+				`keys` like CONCAT ('%',#{keys},'%')
+			</if>
+		</trim>
+	</select>
+</mapper>
